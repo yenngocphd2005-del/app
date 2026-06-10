@@ -1,0 +1,461 @@
+[
+  {
+    "categoryName": "Women",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": null
+  },
+  {
+    "categoryName": "Men",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": null
+  },
+  {
+    "categoryName": "Kids",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": null
+  },
+  {
+    "categoryName": "New",
+    "categoryDescription": null,
+    "icon": null,
+    "image": "assets/images/categories_new.png",
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Women"
+  },
+  {
+    "categoryName": "Clothes",
+    "categoryDescription": null,
+    "icon": null,
+    "image": "assets/images/categories_clothes.png",
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Women"
+  },
+  {
+    "categoryName": "Shoes",
+    "categoryDescription": null,
+    "icon": null,
+    "image": "assets/images/categories-shoes.png",
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Women"
+  },
+  {
+    "categoryName": "Accessories",
+    "categoryDescription": null,
+    "icon": null,
+    "image": "assets/images/categories_accesories.png",
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Women"
+  },
+  {
+    "categoryName": "Tops",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Shirts & Blouses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Cardigans & Sweaters",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Knitwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Blazers",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Outerwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Pants",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Jeans",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Shorts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Skirts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Dresses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "New"
+  },
+  {
+    "categoryName": "Tops",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Shirts & Blouses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Cardigans & Sweaters",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Knitwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Blazers",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Outerwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Pants",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Jeans",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Shorts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Skirts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Dresses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Shoes"
+  },
+  {
+    "categoryName": "Tops",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Shirts & Blouses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Cardigans & Sweaters",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Knitwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Blazers",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Outerwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Pants",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Jeans",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Shorts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Skirts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Dresses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Accessories"
+  },
+  {
+    "categoryName": "Tops",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Shirts & Blouses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Cardigans & Sweaters",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Knitwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Blazers",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Outerwear",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Pants",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Jeans",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Shorts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Skirts",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  },
+  {
+    "categoryName": "Dresses",
+    "categoryDescription": null,
+    "icon": null,
+    "image": null,
+    "placeholder": null,
+    "active": true,
+    "parentCategoryName": "Clothes"
+  }
+]

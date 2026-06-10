@@ -1,0 +1,14 @@
+[
+  {
+    "tagName": "NEW",
+    "icon": "flash.svg"
+  },
+  {
+    "tagName": "SALE",
+    "icon": "percent"
+  },
+  {
+    "tagName": "HOT",
+    "icon": "flame"
+  }
+]
