@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class ApiService {
   // 10.0.2.2 is the special IP alias for localhost in the Android emulator.
   // Use http://localhost:8080 for web/desktop, or change to your local machine IP for physical devices.
-  static const String baseUrl = 'http://10.228.239.138:80/api';
+  static const String baseUrl = 'http://192.168.1.7:80/api';
 
   static Future<Map<String, dynamic>> login(
     String email,

@@ -219,85 +219,159 @@ if (result.status == LoginStatus.success) {
   void _showRedirectSignUpDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: AppColors.white,
-        title: Text(
-          'Account Not Found',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            color: AppColors.primary,
-          ),
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
         ),
-        content: Text(
-          'This account is not registered yet. Would you like to proceed to the Sign Up page?',
-          style: GoogleFonts.inter(color: AppColors.textPrimary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              'CANCEL',
-              style: GoogleFonts.inter(color: AppColors.textSecondary),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SignUpPage(),
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                radius: 40,
+                backgroundColor: Color(0xFFFFF3E0),
+                child: Icon(
+                  Icons.person_search,
+                  color: Colors.orange,
+                  size: 40,
                 ),
-              );
-            },
-            child: Text(
-              'SIGN UP',
-              style: GoogleFonts.inter(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
               ),
-            ),
+
+              const SizedBox(height: 20),
+
+              Text(
+                'Account Not Found',
+                style: GoogleFonts.inter(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Text(
+                'This account is not registered yet. Would you like to proceed to the Sign Up page?',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(fontSize: 15),
+              ),
+
+              const SizedBox(height: 24),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Cancel'),
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SignUpPage(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Sign Up',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      )
     );
   }
 
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: AppColors.white,
-        title: Text(
-          'Login Error',
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.bold,
-            color: AppColors.error,
-          ),
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
         ),
-        content: Text(
-          message == 'USER_NOT_FOUND' 
-              ? 'Account not found.' 
-              : message == 'INVALID_CREDENTIALS' 
-                  ? 'Incorrect password.' 
-                  : message,
-          style: GoogleFonts.inter(color: AppColors.textPrimary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(
-              'OK',
-              style: GoogleFonts.inter(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const CircleAvatar(
+                radius: 40,
+                backgroundColor: Color(0xFFFFEBEE),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: 40,
+                ),
               ),
-            ),
+
+              const SizedBox(height: 20),
+
+              Text(
+                'Login Failed',
+                style: GoogleFonts.inter(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Text(
+                message == 'USER_NOT_FOUND'
+                    ? 'Account not found.'
+                    : message == 'INVALID_CREDENTIALS'
+                        ? 'Incorrect password.'
+                        : message,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(fontSize: 15),
+              ),
+
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(ctx),
+                  child: Text(
+                    'OK',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      )
     );
   }
 

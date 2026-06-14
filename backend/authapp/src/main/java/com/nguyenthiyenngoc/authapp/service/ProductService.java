@@ -41,17 +41,20 @@ class DataSeeder implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final TagRepository tagRepository;
     private final CategoryRepository categoryRepository;
+    private final com.nguyenthiyenngoc.authapp.repository.ReviewRepository reviewRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public DataSeeder(
             ProductRepository productRepository,
             TagRepository tagRepository,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository,
+            com.nguyenthiyenngoc.authapp.repository.ReviewRepository reviewRepository) {
 
         this.productRepository = productRepository;
         this.tagRepository = tagRepository;
         this.categoryRepository = categoryRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -168,6 +171,38 @@ class DataSeeder implements CommandLineRunner {
             }
         }
 
+        // Seed reviews if none exist
+        if (reviewRepository.count() == 0) {
+            System.out.println("Seeding reviews...");
+            try (InputStream is = new ClassPathResource("data/reviews.json").getInputStream()) {
+                List<ReviewSeedDto> dtos = objectMapper.readValue(is, new TypeReference<List<ReviewSeedDto>>() {});
+                List<com.nguyenthiyenngoc.authapp.entity.Review> reviewsToSave = new ArrayList<>();
+
+                // Build slug -> product map
+                Map<String, Product> productSlugMap = new HashMap<>();
+                productRepository.findAll().forEach(p -> productSlugMap.put(p.getSlug(), p));
+
+                for (ReviewSeedDto dto : dtos) {
+                    Product product = productSlugMap.get(dto.getProductSlug());
+                    if (product == null) {
+                        System.out.println("Product not found for slug: " + dto.getProductSlug() + ", skipping review.");
+                        continue;
+                    }
+
+                    com.nguyenthiyenngoc.authapp.entity.Review review =
+                            com.nguyenthiyenngoc.authapp.entity.Review.builder()
+                                    .productId(product.getId())
+                                    .userId(UUID.fromString(dto.getUserId()))
+                                    .rating(dto.getRating())
+                                    .comment(dto.getComment())
+                                    .build();
+
+                    reviewsToSave.add(review);
+                }
+                reviewRepository.saveAll(reviewsToSave);
+            }
+        }
+
         System.out.println("Database seeding completed successfully!");
     }
 }
@@ -208,4 +243,14 @@ class ProductSeedDto {
 class TagSeedDto {
     private String tagName;
     private String icon;
+}
+
+@Data
+class ReviewSeedDto {
+    private String productSlug;
+    private String userName;
+    private String userId;
+    private Integer rating;
+    private String comment;
+    private List<String> images;
 }

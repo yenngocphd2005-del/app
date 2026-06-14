@@ -144,46 +144,105 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _showAlertDialog({
-    required String title,
-    required String message,
-    required bool isSuccess,
+  required String title,
+  required String message,
+  required bool isSuccess,
   }) {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: AppColors.white,
-        title: Text(
-          title,
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w700,
-            color: isSuccess ? AppColors.success : AppColors.error,
-          ),
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
         ),
-        content: Text(
-          message,
-          style: GoogleFonts.inter(
-            color: AppColors.textPrimary,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              if (isSuccess) {
-                Navigator.pushReplacementNamed(context, '/login');
-              }
-            },
-            child: Text(
-              'OK',
-              style: GoogleFonts.inter(
-                color: AppColors.primary,
-                fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: isSuccess
+                      ? const Color(0xFFE8F5E9)
+                      : const Color(0xFFFFEBEE),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  isSuccess
+                      ? Icons.check_circle
+                      : Icons.cancel,
+                  color: isSuccess
+                      ? Colors.green
+                      : Colors.red,
+                  size: 50,
+                ),
               ),
-            ),
+
+              const SizedBox(height: 20),
+
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: isSuccess
+                      ? Colors.green
+                      : Colors.red,
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 14,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(30),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(ctx);
+
+                    if (isSuccess) {
+                      Navigator.pushReplacementNamed(
+                        context,
+                        '/login',
+                      );
+                    }
+                  },
+                  child: Text(
+                    isSuccess ? 'Continue' : 'OK',
+                    style: GoogleFonts.inter(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

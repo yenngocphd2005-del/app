@@ -96,4 +96,20 @@ CREATE TABLE IF NOT EXISTS product_categories (
     category_id UUID REFERENCES categories(id) ON DELETE CASCADE NOT NULL
 );
 
+-- 8. Create Review Table
+CREATE TABLE IF NOT EXISTS review (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL,
+    rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    comment TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
 
+-- 9. Create Review Image Table
+CREATE TABLE IF NOT EXISTS review_image (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    review_id UUID NOT NULL REFERENCES review(id) ON DELETE CASCADE,
+    image_url VARCHAR(500) NOT NULL
+);

@@ -1,4 +1,4 @@
-package com.nguyenthiyenngoc.authapp.impl;
+package com.nguyenthiyenngoc.authapp.service.impl;
 
 import com.nguyenthiyenngoc.authapp.entity.Tag;
 import com.nguyenthiyenngoc.authapp.repository.TagRepository;

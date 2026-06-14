@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 import '../services/api_service.dart';
 import '../models/category_model.dart';
+import 'review_page.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Map<String, dynamic> product;
@@ -564,6 +565,53 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
 
                 const Divider(color: AppColors.textSecondary, height: 32, thickness: 0.2),
+
+                // Rating & Reviews tile
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                  title: Row(
+                    children: [
+                      Text(
+                        'Rating & Reviews',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ...List.generate(5, (i) => Padding(
+                        padding: const EdgeInsets.only(right: 2),
+                        child: SvgPicture.asset(
+                          i < rating ? 'assets/icons/Star-yellow.svg' : 'assets/icons/Star-gray.svg',
+                          width: 12,
+                          height: 12,
+                        ),
+                      )),
+                      const SizedBox(width: 4),
+                      Text(
+                        '($reviewCount)',
+                        style: GoogleFonts.inter(
+                          fontSize: 11,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.chevron_right, color: AppColors.textPrimary),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ReviewPage(
+                          productId: widget.product['id']?.toString() ?? '',
+                          productName: widget.product['productName']?.toString() ?? '',
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(color: AppColors.textSecondary, height: 1, thickness: 0.2),
 
                 // Shipping info
                 ListTile(
