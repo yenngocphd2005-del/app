@@ -71,8 +71,16 @@ class ReviewService {
         }
       }
 
+      print("PRODUCT ID = $productId");
+      print("USER ID = $userId");
+      print("RATING = $rating");
+      print("COMMENT = $comment");
+
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+
+      print("REVIEW STATUS = ${response.statusCode}");
+      print("REVIEW BODY = ${response.body}");
 
       if (response.statusCode == 200) {
         return {

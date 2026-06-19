@@ -41,6 +41,7 @@ class _Categories1PageState extends State<Categories1Page> with TickerProviderSt
 
     try {
       final rootRes = await ApiService.getCategories(root: true);
+      print("ROOT CATEGORY RESULT = $rootRes");
 
       if (!mounted) return;
 

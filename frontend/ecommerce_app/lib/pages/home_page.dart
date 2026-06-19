@@ -796,79 +796,198 @@ class _HomePageState extends State<HomePage> {
   // --- PROFILE TAB (preserving the original Welcome & logout dashboard code) ---
   Widget _buildProfileTab() {
     final user = widget.user;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(
+            16, // left
+            10, // top
+            16, // right
+            16, // bottom
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
+
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.search,
+                    size: 28,
+                    color: AppColors.textPrimary,
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+
+              const SizedBox(height: 7),
+
+              Text(
+                'My profile',
+                style: GoogleFonts.inter(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Profile settings',
-                    style: GoogleFonts.inter(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+
+                  CircleAvatar(
+                    radius: 32,
+                    backgroundColor:
+                        AppColors.primary,
+                    child: Text(
+                      user.firstName
+                          .substring(0, 1)
+                          .toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.logout, color: AppColors.primary),
-                    onPressed: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/login', (route) => false);
-                    },
+
+                  const SizedBox(width: 16),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                      children: [
+
+                        Text(
+                          '${user.firstName} ${user.lastName}',
+                          style: GoogleFonts.inter(
+                            fontSize: 18,
+                            fontWeight:
+                                FontWeight.w600,
+                          ),
+                        ),
+
+                        Text(
+                          user.email,
+                          style: GoogleFonts.inter(
+                            color: AppColors
+                                .textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.04),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome Back!',
-                      style: GoogleFonts.inter(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildInfoRow('Name', '${user.firstName} ${user.lastName}'),
-                    _buildInfoRow('Email', user.email),
-                    if (user.phoneNumber != null && user.phoneNumber!.isNotEmpty)
-                      _buildInfoRow('Phone', user.phoneNumber!),
-                    _buildInfoRow('Role', user.roleName ?? 'None'),
-                  ],
-                ),
+
+              const SizedBox(height: 15),
+
+              _buildProfileMenuItem(
+                'My orders',
+                'View your orders',
+                () {},
               ),
-              const Spacer(),
-              Center(
-                child: Text(
-                  'Fullstack E-Commerce App Project v1.0',
-                  style: GoogleFonts.inter(
-                    fontSize: 12,
-                    color: AppColors.textSecondary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+
+              _buildProfileMenuItem(
+                'Shipping addresses',
+                'Manage addresses',
+                () {},
+              ),
+
+              _buildProfileMenuItem(
+                'Payment methods',
+                'Manage cards',
+                () {},
+              ),
+
+              _buildProfileMenuItem(
+                'Promocodes',
+                'Available discounts',
+                () {},
+              ),
+
+              _buildProfileMenuItem(
+                'My reviews',
+                'Your product reviews',
+                () {},
+              ),
+
+              _buildProfileMenuItem(
+                'Settings',
+                'Notifications, password',
+                () {},
+              ),
+
+              _buildProfileMenuItem(
+                'Logout',
+                'Sign out of account',
+                () async {
+                  final confirm = await showDialog<bool>(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: Text(
+                          'Logout',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                        content: const Text(
+                          'Are you sure you want to sign out?',
+                        ),
+                        actions: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: OutlinedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context, false);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                              ),
+
+                              const SizedBox(width: 12),
+
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                  child: const Text(
+                                    'Logout',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  if (confirm == true) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      '/login',
+                      (route) => false,
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -901,6 +1020,59 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildProfileMenuItem(
+  String title,
+  String subtitle,
+  VoidCallback onTap,
+  ) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: 18,
+        ),
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Color(0xFFEEEEEE),
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.inter(
+                      fontSize: 11,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.grey,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -523,83 +523,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ),
 
                 // Rating
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Row(
-                    children: [
-                      ...List.generate(5, (i) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 2),
-                          child: SvgPicture.asset(
-                            i < rating ? 'assets/icons/Star-yellow.svg' : 'assets/icons/Star-gray.svg',
-                            width: 14,
-                            height: 14,
-                          ),
-                        );
-                      }),
-                      const SizedBox(width: 4),
-                      Text(
-                        '($reviewCount)',
-                        style: GoogleFonts.inter(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Description
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                  child: Text(
-                    description,
-                    style: GoogleFonts.inter(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textPrimary,
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-
-                const Divider(color: AppColors.textSecondary, height: 32, thickness: 0.2),
-
-                // Rating & Reviews tile
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                  title: Row(
-                    children: [
-                      Text(
-                        'Rating & Reviews',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.textPrimary,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      ...List.generate(5, (i) => Padding(
-                        padding: const EdgeInsets.only(right: 2),
-                        child: SvgPicture.asset(
-                          i < rating ? 'assets/icons/Star-yellow.svg' : 'assets/icons/Star-gray.svg',
-                          width: 12,
-                          height: 12,
-                        ),
-                      )),
-                      const SizedBox(width: 4),
-                      Text(
-                        '($reviewCount)',
-                        style: GoogleFonts.inter(
-                          fontSize: 11,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  trailing: const Icon(Icons.chevron_right, color: AppColors.textPrimary),
+                GestureDetector(
                   onTap: () {
+                    print("OPEN REVIEW PRODUCT ID = ${widget.product['id']}");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -610,8 +536,59 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                     );
                   },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+
+                      // Rating
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        child: Row(
+                          children: [
+                            ...List.generate(5, (i) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 2),
+                                child: SvgPicture.asset(
+                                  i < rating
+                                      ? 'assets/icons/Star-yellow.svg'
+                                      : 'assets/icons/Star-gray.svg',
+                                  width: 14,
+                                  height: 14,
+                                ),
+                              );
+                            }),
+                            const SizedBox(width: 4),
+                            Text(
+                              '($reviewCount)',
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Description
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0,
+                          vertical: 8.0,
+                        ),
+                        child: Text(
+                          description,
+                          style: GoogleFonts.inter(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.textPrimary,
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const Divider(color: AppColors.textSecondary, height: 1, thickness: 0.2),
+
+                const Divider(color: AppColors.textSecondary, height: 32, thickness: 0.2),
 
                 // Shipping info
                 ListTile(

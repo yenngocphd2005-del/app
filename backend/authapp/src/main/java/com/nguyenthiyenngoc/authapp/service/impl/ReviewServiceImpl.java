@@ -2,10 +2,12 @@ package com.nguyenthiyenngoc.authapp.service.impl;
 
 import com.nguyenthiyenngoc.authapp.entity.Review;
 import com.nguyenthiyenngoc.authapp.entity.ReviewImage;
+import com.nguyenthiyenngoc.authapp.repository.ReviewImageRepository;
 import com.nguyenthiyenngoc.authapp.repository.ReviewRepository;
 import com.nguyenthiyenngoc.authapp.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -20,13 +22,15 @@ import java.util.*;
 public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final ReviewImageRepository reviewImageRepository;
 
     private static final String UPLOAD_DIR = "uploads/reviews/";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMM d, yyyy");
 
     @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository, ReviewImageRepository reviewImageRepository) {
         this.reviewRepository = reviewRepository;
+        this.reviewImageRepository = reviewImageRepository;
     }
 
     @Override
@@ -74,7 +78,16 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    @Transactional
     public Map<String, Object> createReview(UUID productId, UUID userId, int rating, String comment, List<MultipartFile> images) {
+
+        if (reviewRepository.existsByUserIdAndProductId(
+        userId,
+        productId)) {
+
+            throw new RuntimeException(
+                    "You have already reviewed this product");
+        }
         // Build review entity
         Review review = Review.builder()
                 .productId(productId)
@@ -83,23 +96,24 @@ public class ReviewServiceImpl implements ReviewService {
                 .comment(comment)
                 .build();
 
-        // Upload ảnh
-        List<ReviewImage> imageEntities = new ArrayList<>();
+        // Lưu review trước để có ID
+        Review saved = reviewRepository.save(review);
+
+        // Upload ảnh và lưu vào bảng review_image
         if (images != null) {
             for (MultipartFile file : images) {
                 if (file != null && !file.isEmpty()) {
                     String imageUrl = saveImage(file);
                     ReviewImage img = ReviewImage.builder()
-                            .review(review)
+                            .review(saved)
                             .imageUrl(imageUrl)
                             .build();
-                    imageEntities.add(img);
+                    reviewImageRepository.save(img);
+                    saved.getImages().add(img);
                 }
             }
         }
-        review.setImages(imageEntities);
 
-        Review saved = reviewRepository.save(review);
         return mapReview(saved);
     }
 

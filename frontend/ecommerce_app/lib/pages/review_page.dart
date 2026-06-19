@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/app_colors.dart';
 import '../models/review_model.dart';
@@ -24,10 +27,87 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  List<ReviewModel> _reviews = [];
+  // Reviews from API (or locally submitted)
+  List<ReviewModel> _userReviews = [];
+  // Default reviews from reviews.json — loaded once, never cleared
+  List<ReviewModel> _defaultReviews = [];
   ReviewSummaryModel _summary = ReviewSummaryModel.empty();
   bool _isLoading = true;
   bool _withPhoto = false;
+
+  bool get _hasReviewed {
+    return _userReviews.any(
+      (r) =>
+          r.userId == widget.userId &&
+          r.productId == widget.productId,
+    );
+  }
+
+  // Combined display list: user reviews first, then defaults
+  // Filtered by _withPhoto if needed
+  List<ReviewModel> get _displayReviews {
+    final combined = [..._userReviews, ..._defaultReviews];
+    if (_withPhoto) {
+      return combined.where((r) => r.images.isNotEmpty).toList();
+    }
+    return combined;
+  }
+
+  // Check if a string is a valid UUID format
+  bool _isValidUuid(String id) {
+    final uuidRegex = RegExp(
+      r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+    );
+    return uuidRegex.hasMatch(id);
+  }
+
+  // Load default reviews from assets/reviews.json
+  Future<List<ReviewModel>> _loadDefaultReviews({bool withPhoto = false}) async {
+    try {
+      final jsonStr = await rootBundle.loadString('assets/reviews.json');
+      final List<dynamic> data = jsonDecode(jsonStr);
+      final reviews = data
+          .map((e) => ReviewModel.fromMap(Map<String, dynamic>.from(e)))
+          .toList();
+      if (withPhoto) {
+        return reviews.where((r) => r.images.isNotEmpty).toList();
+      }
+      return reviews;
+    } catch (_) {
+      return [];
+    }
+  }
+
+  // Compute a summary from a list of reviews
+  ReviewSummaryModel _computeSummary(List<ReviewModel> reviews) {
+    if (reviews.isEmpty) return ReviewSummaryModel.empty();
+    final total = reviews.length;
+    int five = 0, four = 0, three = 0, two = 0, one = 0;
+    double ratingSum = 0;
+    for (final r in reviews) {
+      ratingSum += r.rating;
+      if (r.rating == 5) {
+        five++;
+      } else if (r.rating == 4) {
+        four++;
+      } else if (r.rating == 3) {
+        three++;
+      } else if (r.rating == 2) {
+        two++;
+      } else if (r.rating == 1) {
+        one++;
+      }
+    }
+    return ReviewSummaryModel(
+      averageRating: ratingSum / total,
+      totalReviews: total,
+      fiveStar: five,
+      fourStar: four,
+      threeStar: three,
+      twoStar: two,
+      oneStar: one,
+    );
+  }
 
   @override
   void initState() {
@@ -37,33 +117,105 @@ class _ReviewPageState extends State<ReviewPage> {
 
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
-    final results = await Future.wait([
-      ReviewService.getReviews(widget.productId, withPhoto: _withPhoto),
-      ReviewService.getRatingSummary(widget.productId),
-    ]);
+
+    // Load defaults once (they never get cleared)
+    if (_defaultReviews.isEmpty) {
+      _defaultReviews = await _loadDefaultReviews();
+    }
+
+    // Load API reviews for valid UUID products
+    final isValidId = _isValidUuid(widget.productId);
+    List<ReviewModel> apiReviews = [];
+    ReviewSummaryModel apiSummary = ReviewSummaryModel.empty();
+
+    if (isValidId) {
+      try {
+        final results = await Future.wait([
+          ReviewService.getReviews(widget.productId),
+          ReviewService.getRatingSummary(widget.productId),
+        ]);
+        apiReviews = results[0] as List<ReviewModel>;
+        apiSummary = results[1] as ReviewSummaryModel;
+      } catch (_) {}
+    }
 
     if (!mounted) return;
     setState(() {
-      _reviews = results[0] as List<ReviewModel>;
-      _summary = results[1] as ReviewSummaryModel;
+      _userReviews = apiReviews;
+      // Use API summary if it has data; else compute from everything
+      _summary = apiSummary.totalReviews > 0
+          ? apiSummary
+          : _computeSummary([...apiReviews, ..._defaultReviews]);
       _isLoading = false;
     });
   }
 
-  Future<void> _onWithPhotoChanged(bool value) async {
+  // Photo filter: just toggle the flag, _displayReviews getter handles filtering
+  void _onWithPhotoChanged(bool value) {
     setState(() {
       _withPhoto = value;
-      _isLoading = true;
     });
-    final reviews = await ReviewService.getReviews(
-      widget.productId,
-      withPhoto: value,
+  }
+
+  // Called by WriteReviewBottomSheet with the submitted data.
+  // Adds the review locally immediately (optimistic), then tries API in background.
+  Future<void> _handleReviewSubmit(
+    int rating,
+    String comment,
+    List<File> images,
+  ) async {
+    final now = DateTime.now();
+    const monthNames = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    final dateStr = '${monthNames[now.month - 1]} ${now.day}, ${now.year}';
+
+    // Build local review immediately
+    final localReview = ReviewModel(
+      id: 'local-${now.millisecondsSinceEpoch}',
+      productId: widget.productId,
+      userId: widget.userId,
+      userName: 'Me',
+      rating: rating,
+      comment: comment.isNotEmpty ? comment : null,
+      createdAt: dateStr,
+      images: images.map((f) => f.path).toList(),
     );
-    if (!mounted) return;
+
+    // Prepend to user reviews list and recompute summary
     setState(() {
-      _reviews = reviews;
-      _isLoading = false;
+      _userReviews = [localReview, ..._userReviews];
+      _summary = _computeSummary(_displayReviews);
     });
+
+    // Resolve a valid product UUID for the database FK constraint
+    String resolvedProductId = widget.productId;
+
+    if (!_isValidUuid(resolvedProductId)) {
+      // Mock product — try to get a real product ID from the API
+      try {
+        final products = await ApiService.getProducts();
+        if (products.isNotEmpty) {
+          resolvedProductId = products[0]['id']?.toString() ?? resolvedProductId;
+        }
+      } catch (_) {}
+    }
+
+    // Submit to backend for persistence
+    try {
+      debugPrint('Submitting review — productId: $resolvedProductId, userId: ${widget.userId}');
+      final result = await ReviewService.submitReview(
+        productId: resolvedProductId,
+        userId: widget.userId,
+        rating: rating,
+        comment: comment,
+        images: images.isNotEmpty ? images : null,
+      );
+      debugPrint('Review submit result: $result');
+    } catch (e) {
+      debugPrint('Review submit error: $e');
+    }
   }
 
   void _showWriteReview() {
@@ -74,7 +226,7 @@ class _ReviewPageState extends State<ReviewPage> {
       builder: (context) => WriteReviewBottomSheet(
         productId: widget.productId,
         userId: widget.userId,
-        onReviewSubmitted: _loadData,
+        onReviewSubmitted: _handleReviewSubmit,
       ),
     );
   }
@@ -176,7 +328,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       child: CircularProgressIndicator(color: AppColors.primary),
                     ),
                   )
-                else if (_reviews.isEmpty)
+                else if (_displayReviews.isEmpty)
                   SliverFillRemaining(
                     child: Center(
                       child: Column(
@@ -205,8 +357,8 @@ class _ReviewPageState extends State<ReviewPage> {
                 else
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildReviewCard(_reviews[index]),
-                      childCount: _reviews.length,
+                      (context, index) => _buildReviewCard(_displayReviews[index]),
+                      childCount: _displayReviews.length,
                     ),
                   ),
 
@@ -221,12 +373,27 @@ class _ReviewPageState extends State<ReviewPage> {
             bottom: 24,
             right: 16,
             child: GestureDetector(
-              onTap: _showWriteReview,
+              onTap: () {
+                if (_hasReviewed) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'You have already reviewed this product',
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                _showWriteReview();
+              },
               child: Container(
                 height: 52,
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 decoration: BoxDecoration(
-                  color: AppColors.primary,
+                  color: _hasReviewed
+                    ? Colors.grey
+                    : AppColors.primary,
                   borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
@@ -242,7 +409,9 @@ class _ReviewPageState extends State<ReviewPage> {
                     const Icon(Icons.edit, color: AppColors.white, size: 18),
                     const SizedBox(width: 8),
                     Text(
-                      'Write a review',
+                      _hasReviewed
+                          ? 'Write a review'
+                          : 'Write a review',
                       style: GoogleFonts.inter(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -391,7 +560,7 @@ class _ReviewPageState extends State<ReviewPage> {
                 radius: 18,
                 backgroundColor: AppColors.primary.withValues(alpha: 0.15),
                 child: Text(
-                  _getInitials(review.userId),
+                  _getInitials(review.userName ?? review.userId),
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -408,7 +577,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'User ${review.userId.substring(0, 8)}',
+                          review.userName ?? 'User ${review.userId.length >= 8 ? review.userId.substring(0, 8) : review.userId}',
                           style: GoogleFonts.inter(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
@@ -463,26 +632,37 @@ class _ReviewPageState extends State<ReviewPage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: review.images.length,
                 itemBuilder: (context, index) {
-                  final imageUrl = _buildImageUrl(review.images[index]);
+                  final imgPath = review.images[index];
+
                   return Padding(
-                    padding: EdgeInsets.only(right: index < review.images.length - 1 ? 8 : 0),
+                    padding: EdgeInsets.only(
+                      right: index < review.images.length - 1 ? 8 : 0,
+                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        imageUrl,
-                        width: 96,
-                        height: 96,
-                        fit: BoxFit.cover,
-                        errorBuilder: (c, e, s) => Container(
-                          width: 96,
-                          height: 96,
-                          color: const Color(0xFFF0F0F0),
-                          child: const Icon(
-                            Icons.broken_image_outlined,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ),
+                      child: imgPath.startsWith('assets/')
+                          ? Image.asset(
+                              imgPath,
+                              width: 96,
+                              height: 96,
+                              fit: BoxFit.cover,
+                              errorBuilder: (c, e, s) => _buildBrokenImage(),
+                            )
+                          : imgPath.startsWith('http')
+                              ? Image.network(
+                                  imgPath,
+                                  width: 96,
+                                  height: 96,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (c, e, s) => _buildBrokenImage(),
+                                )
+                              : Image.file(
+                                  File(imgPath),
+                                  width: 96,
+                                  height: 96,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (c, e, s) => _buildBrokenImage(),
+                                ),
                     ),
                   );
                 },
@@ -515,10 +695,30 @@ class _ReviewPageState extends State<ReviewPage> {
     );
   }
 
-  String _getInitials(String userId) {
-    if (userId.length >= 2) {
-      return userId.substring(0, 2).toUpperCase();
+  Widget _buildBrokenImage() {
+    return Container(
+      width: 96,
+      height: 96,
+      color: const Color(0xFFF0F0F0),
+      child: const Icon(
+        Icons.broken_image_outlined,
+        color: AppColors.textSecondary,
+      ),
+    );
+  }
+
+  String _getInitials(String nameOrId) {
+    final trimmed = nameOrId.trim();
+    if (trimmed.isEmpty) return 'U';
+    // If it looks like a full name (contains space), use first letters of each word
+    final parts = trimmed.split(' ');
+    if (parts.length >= 2) {
+      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
     }
-    return 'U';
+    // Otherwise use first 2 chars
+    if (trimmed.length >= 2) {
+      return trimmed.substring(0, 2).toUpperCase();
+    }
+    return trimmed[0].toUpperCase();
   }
 }

@@ -16,4 +16,9 @@ public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
     @Query("SELECT r FROM Review r WHERE r.productId = :productId AND SIZE(r.images) > 0 ORDER BY r.createdAt DESC")
     List<Review> findByProductIdWithImages(@Param("productId") UUID productId);
+
+    boolean existsByUserIdAndProductId(
+        UUID userId,
+        UUID productId
+    );
 }

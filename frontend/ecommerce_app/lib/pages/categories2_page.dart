@@ -38,8 +38,9 @@ class _Categories2PageState extends State<Categories2Page> {
     });
 
     try {
+      print("PARENT CATEGORY ID = ${widget.parentCategory.id}");
       final res = await ApiService.getCategories(parentId: widget.parentCategory.id);
-      
+      print("SUB CATEGORY RESULT = $res");
       if (!mounted) return;
       setState(() {
         _subCategories = res.map((json) => CategoryModel.fromJson(json)).toList();
@@ -47,6 +48,7 @@ class _Categories2PageState extends State<Categories2Page> {
         _isLoading = false;
       });
     } catch (e) {
+      print("SUB CATEGORY ERROR = $e");
       debugPrint('Error fetching subcategories: $e');
       if (!mounted) return;
       setState(() {

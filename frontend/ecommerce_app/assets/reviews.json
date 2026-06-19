@@ -1,0 +1,95 @@
+[
+  {
+    "id": "default-review-001",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "helene-moore-uid",
+    "userName": "Helene Moore",
+    "rating": 4,
+    "comment": "The dress is great! Very classy and comfortable. It fit perfectly! I'm 5'7\" and 130 pounds. I am a 34B chest. This dress would be too long for those who are shorter but could be hemmed. I wouldn't recommend it for those big chested as I am smaller chested and it fit me perfectly. The underarms were not too wide and the dress was made well.",
+    "createdAt": "June 5, 2019",
+    "images": [
+      "assets/images/people2.2.png",
+      "assets/images/people2.3.png"
+    ],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-002",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "kim-shine-uid",
+    "userName": "Kim Shine",
+    "rating": 4,
+    "comment": "I loved this dress so much as soon as I tried it on I knew I had to buy it in another color. I am 5'3 about 155lbs and I carry all my weight in my upper body. When I put it on I felt like it thinned me put and I got so many compliments.",
+    "createdAt": "August 13, 2019",
+    "images": [
+      "assets/images/t-shirt.png"
+    ],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-003",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "matilda-brown-uid",
+    "userName": "Matilda Brown",
+    "rating": 4,
+    "comment": "I loved this dress so much as soon as I tried it on I knew I had to buy it in another color. I am 5'3 about 155lbs and I carry all my weight in my upper body.",
+    "createdAt": "August 14, 2019",
+    "images": [],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-004",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "kate-doe-uid",
+    "userName": "Kate Doe",
+    "rating": 5,
+    "comment": "Absolutely love this product! It exceeded all my expectations. The quality is top-notch and it arrived quickly.",
+    "createdAt": "September 2, 2019",
+    "images": [],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-005",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "sarah-jane-uid",
+    "userName": "Sarah Jane",
+    "rating": 3,
+    "comment": "Good product overall but the sizing runs a bit large. I had to exchange for a smaller size. Customer service was helpful.",
+    "createdAt": "October 10, 2019",
+    "images": [],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-006",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "emily-chen-uid",
+    "userName": "Emily Chen",
+    "rating": 5,
+    "comment": "Perfect fit and beautiful color. I've received so many compliments wearing this. Will definitely buy again!",
+    "createdAt": "November 15, 2019",
+    "images": [],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-007",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "jessica-lee-uid",
+    "userName": "Jessica Lee",
+    "rating": 4,
+    "comment": "Really nice quality. The material is soft and comfortable. Looks exactly like the photos. I'm very satisfied.",
+    "createdAt": "December 1, 2019",
+    "images": [],
+    "avatarUrl": ""
+  },
+  {
+    "id": "default-review-008",
+    "productId": "00000000-0000-0000-0000-000000000000",
+    "userId": "anna-white-uid",
+    "userName": "Anna White",
+    "rating": 2,
+    "comment": "The color was slightly different from what was shown online. Otherwise the quality seems fine. A bit disappointed with the color mismatch.",
+    "createdAt": "January 8, 2020",
+    "images": [],
+    "avatarUrl": ""
+  }
+]

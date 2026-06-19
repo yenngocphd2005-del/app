@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../theme/app_colors.dart';
-import '../services/review_service.dart';
 
 class WriteReviewBottomSheet extends StatefulWidget {
   final String productId;
   final String userId;
-  final VoidCallback onReviewSubmitted;
+  // Parent handles API call + local state update
+  final Future<void> Function(int rating, String comment, List<File> images)
+      onReviewSubmitted;
 
   const WriteReviewBottomSheet({
     super.key,
@@ -154,42 +155,27 @@ class _WriteReviewBottomSheetState extends State<WriteReviewBottomSheet> {
 
     setState(() => _isSubmitting = true);
 
-    final result = await ReviewService.submitReview(
-      productId: widget.productId,
-      userId: widget.userId,
-      rating: _selectedRating,
-      comment: _commentController.text.trim(),
-      images: _selectedImages.isNotEmpty ? _selectedImages : null,
+    // Delegate to parent: parent adds review locally and fires API in background
+    await widget.onReviewSubmitted(
+      _selectedRating,
+      _commentController.text.trim(),
+      List<File>.from(_selectedImages),
     );
 
     if (!mounted) return;
     setState(() => _isSubmitting = false);
 
-    if (result['success'] == true) {
-      Navigator.pop(context);
-      widget.onReviewSubmitted();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Review submitted successfully!',
-            style: GoogleFonts.inter(color: AppColors.white),
-          ),
-          backgroundColor: AppColors.success,
-          duration: const Duration(seconds: 2),
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Review submitted successfully!',
+          style: GoogleFonts.inter(color: AppColors.white),
         ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            result['message']?.toString() ?? 'Failed to submit review',
-            style: GoogleFonts.inter(color: AppColors.white),
-          ),
-          backgroundColor: AppColors.error,
-          duration: const Duration(seconds: 3),
-        ),
-      );
-    }
+        backgroundColor: AppColors.success,
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   @override

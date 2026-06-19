@@ -2,6 +2,7 @@ class ReviewModel {
   final String id;
   final String productId;
   final String userId;
+  final String? userName; // optional: from default reviews.json
   final int rating;
   final String? comment;
   final String? createdAt;
@@ -11,6 +12,7 @@ class ReviewModel {
     required this.id,
     required this.productId,
     required this.userId,
+    this.userName,
     required this.rating,
     this.comment,
     this.createdAt,
@@ -22,6 +24,7 @@ class ReviewModel {
       id: map['id']?.toString() ?? '',
       productId: map['productId']?.toString() ?? '',
       userId: map['userId']?.toString() ?? '',
+      userName: map['userName']?.toString(),
       rating: (map['rating'] as num?)?.toInt() ?? 0,
       comment: map['comment']?.toString(),
       createdAt: map['createdAt']?.toString(),
